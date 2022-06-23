@@ -19,9 +19,9 @@
 control your petkit pet feeder from homekit, get full use of iOS automation.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot.jpg" alt="screenshot" /><img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot2.jpg" alt="screenshot2" />
+  <img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot.jpeg" alt="screenshot" /><img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot2.jpeg" alt="screenshot2" />
   <br>
-  <img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot3.jpg" alt="screenshot3" /><img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot4.jpg" alt="screenshot4" />
+  <img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot3.jpeg" alt="screenshot3" /><img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/screenshot4.jpeg" alt="screenshot4" />
 </p>
 
 
