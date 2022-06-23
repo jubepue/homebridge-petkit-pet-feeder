@@ -20,8 +20,8 @@ const globalVariables = Object.freeze({
         'D4'                                // Perkit Feeder Element SOLO
     ],
     'support_settings': {
-        'manualLock' : 'settings.manualLock',
-        'lightMode' : 'settings.lightMode',
+        // 'manualLock' : 'settings.manualLock',
+        // 'lightMode' : 'settings.lightMode',
         'manualLock' : 'manualLock',
         'lightMode' : 'lightMode'
     },
