@@ -1,0 +1,40 @@
+{
+  "name": "homebridge-petkit-feeder-mini",
+  "version": "2.1.4",
+  "description": "control your petkit feeder mini to feed your lovely pet.",
+  "main": "index.js",
+  "scripts": {
+    "test-homebridge": "/usr/bin/homebridge -P ./ -I -U /var/lib/homebridge",
+    "test": "echo Ok."
+  },
+  "keywords": [
+    "petkit",
+    "feeder",
+    "homebridge",
+    "homebridge-plugin"
+  ],
+  "engines": {
+    "homebridge": ">=0.4.45",
+    "node": ">=12.0.0"
+  },
+  "author": "elfive@elfive.cn",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.3",
+    "polling-to-event": "^2.1.0",
+    "string-format": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elfive/homebridge-petkit-feeder-mini.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elfive/homebridge-petkit-feeder-mini/issues"
+  },
+  "homepage": "https://github.com/elfive/homebridge-petkit-feeder-mini#readme",
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/iamelfive"
+  }
+}
