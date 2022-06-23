@@ -1,7 +1,7 @@
 {
-  "name": "homebridge-petkit-feeder-mini",
-  "version": "2.1.4",
-  "description": "control your petkit feeder mini to feed your lovely pet.",
+  "name": "homebridge-petkit-pet-feeder",
+  "description": "control all your types of petkit pet feeders from homekit, get full use of iOS automation.",
+  "version": "2.2.0",
   "main": "index.js",
   "scripts": {
     "test-homebridge": "/usr/bin/homebridge -P ./ -I -U /var/lib/homebridge",
@@ -14,27 +14,27 @@
     "homebridge-plugin"
   ],
   "engines": {
-    "homebridge": ">=0.4.45",
-    "node": ">=12.0.0"
+    "homebridge": ">=1.0.0",
+    "node": ">=16.0.0"
   },
-  "author": "elfive@elfive.cn",
+  "author": "jubepue@gmail.com",
   "license": "Apache-2.0",
   "dependencies": {
-    "axios": "^0.21.1",
-    "dayjs": "^1.10.3",
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.3",
     "polling-to-event": "^2.1.0",
     "string-format": "^2.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elfive/homebridge-petkit-feeder-mini.git"
+    "url": "git+https://github.com/jubepue/homebridge-petkit-pet-feeder.git"
   },
   "bugs": {
-    "url": "https://github.com/elfive/homebridge-petkit-feeder-mini/issues"
+    "url": "https://github.com/jubepue/homebridge-petkit-pet-feeder/issues"
   },
-  "homepage": "https://github.com/elfive/homebridge-petkit-feeder-mini#readme",
+  "homepage": "https://github.com/jubepue/homebridge-petkit-pet-feeder",
   "funding": {
     "type": "paypal",
-    "url": "https://paypal.me/iamelfive"
+    "url": "https://paypal.me/jubepue"
   }
 }
