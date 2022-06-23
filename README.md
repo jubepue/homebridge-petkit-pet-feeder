@@ -73,7 +73,7 @@ you should provide one critical infomation to this plugin: **X-Session**, if you
 Be aware of that, to minimize the effect to the Petkit server with unnecessary http requests, the plugin just update device status more than 10s interval, which means the status will bufferd at lease 10s. 
 
 - X-Session: this value will change every time you login you Petkit app, so do not logoff your Petkit app unless necessary. 
-- deviceId: this value indicate which device you wanna to control. If you just have one Petkit feeder mini, you can ignore this value.
+- deviceId: this value indicate which device you wanna to control. If you just have one Petkit feeder device, you can ignore this value.
 
 here is a example of Quantumult X capture data page:
 
