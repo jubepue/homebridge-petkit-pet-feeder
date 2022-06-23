@@ -326,7 +326,7 @@ class petkit_feeder_plugin {
         }
 
         // device model
-        const device_model = conf.fulfill('model', 'FeederMini');
+        const device_model = conf.fulfill('model', 'D4');
         if (-1 === globalVariables.support_device_type.indexOf(device_model)) {
             this.log.error(format('unsupported device type: {}.', device_model));
             return undefined;
