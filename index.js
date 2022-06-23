@@ -1126,12 +1126,15 @@ class petkit_feeder_plugin {
         if (petkitDevice.config.get('enable_desiccant')) {
             service = petkitDevice.services.desiccant_level_service;
             if (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('alert_desiccant_threshold')) {
+                service_status = Characteristic.FilterChangeIndication.CHANGE_FILTER;
                 if (petkitDevice.config.get('enable_autoreset_desiccant')) {
-                    service_status = Characteristic.FilterChangeIndication.CHANGE_FILTER;
-                    this.log.info(format('desiccant only {} day(s) left, reset it.', petkitDevice.status.desiccantLeftDays));
-                    this.hb_desiccantLeftDays_reset(petkitDevice, () => {
-                        service.setCharacteristic(Characteristic.FilterChangeIndication, Characteristic.FilterChangeIndication.FILTER_OK);
-                    });
+                    if (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('reset_desiccant_threshold')) {
+                        this.hb_desiccantLeftDays_reset(petkitDevice, () => {
+                            service.setCharacteristic(Characteristic.FilterChangeIndication, Characteristic.FilterChangeIndication.FILTER_OK);
+                        });
+                    } else {        
+                        this.log.info(format('desiccant only {} day(s) left, reset it.', petkitDevice.status.desiccantLeftDays));
+                    }
                 } else {
                     this.log.info('desiccant auto reset function is disabled.');
                 }
@@ -1247,7 +1250,7 @@ class petkit_feeder_plugin {
     }
 
     hb_desiccantIndicator_get(petkitDevice, callback) {
-        const status = (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get(' ') ? 1 : 0);
+        const status = (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('alert_desiccant_threshold') ? 1 : 0);
         callback(null, status);
     }
 
