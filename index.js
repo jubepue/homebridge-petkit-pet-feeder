@@ -254,10 +254,10 @@ class PetkitFeederDevice {
     getLowBatteryStatusForHomebridge() {
         if (this.status.batteryPower * globalVariables.config.batteryPersentPerLevel <= 50) {
             if (this.status.batteryStatus === 0) {
-                if (!this.config.get('ignore_battery_when_charging')) {
-                    return 0;
-                } else {
+                if (this.config.get('ignore_battery_when_charging')) {
                     return 1;
+                } else {
+                    return 0;
                 }
             } else {
                 return 0;
