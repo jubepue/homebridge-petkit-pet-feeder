@@ -598,7 +598,9 @@ class petkit_feeder_plugin {
             
             service_status = petkitDevice.getLowBatteryStatusForHomebridge();
             battery_status_service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
-
+            battery_status_service.getCharacteristic(Characteristic.StatusLowBattery)
+                .on('get', this.hb_deviceStatusLowBattery_get.bind(this, petkitDevice));
+            
             petkitDevice.services.battery_status_service = battery_status_service;
         }
 
@@ -1077,8 +1079,7 @@ class petkit_feeder_plugin {
             // low battery status
             service_status = petkitDevice.getLowBatteryStatusForHomebridge();
             this.log.info(format('battery level status is {}.', service_status ? 'normal' : 'low'));
-            service.getCharacteristic(Characteristic.StatusLowBattery)
-                .updateValue(service_status);
+            service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
         }
 
 
