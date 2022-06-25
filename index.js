@@ -250,6 +250,22 @@ class PetkitFeederDevice {
             return 0;
         }
     }
+    
+    getLowBatteryStatusForHomebridge() {
+        if (this.status.batteryPower * globalVariables.config.batteryPersentPerLevel <= 50) {
+            if (this.status.batteryStatus === 0) {
+                if (!this.config.get('ignore_battery_when_charging')) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 0;
+            }
+        } else {
+            return 1;
+        }
+    }
 };
 
 function getTimestamp() {
@@ -579,10 +595,9 @@ class petkit_feeder_plugin {
                 Characteristic.ChargingState.NOT_CHARGING));
             battery_status_service.getCharacteristic(Characteristic.ChargingState)
                 .on('get', this.hb_deviceChargingState_get.bind(this, petkitDevice));
-
-            battery_status_service.setCharacteristic(Characteristic.StatusLowBattery, (petkitDevice.status.batteryPower <= 50 ?
-                Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW :
-                Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL));
+            
+            service_status = petkitDevice.getLowBatteryStatusForHomebridge();
+            battery_status_service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
             battery_status_service.getCharacteristic(Characteristic.StatusLowBattery)
                 .on('get', this.hb_deviceStatusLowBattery_get.bind(this, petkitDevice));
 
@@ -1062,15 +1077,8 @@ class petkit_feeder_plugin {
             service.setCharacteristic(Characteristic.ChargingState, service_status);
 
             // low battery status
-            if (petkitDevice.status.batteryStatus !== 0 &&
-                !petkitDevice.config.get('ignore_battery_when_charging') &&
-                petkitDevice.status.batteryPower * globalVariables.config.batteryPersentPerLevel <= 50) {
-                service_status = Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
-                this.log.info('battery level status is low');
-            } else {
-                service_status = Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL;
-                this.log.info('battery level status is normal');
-            }
+            service_status = petkitDevice.getLowBatteryStatusForHomebridge();
+            this.log.info(format('battery level status is {}.', service_status ? 'normal' : 'low'));
             service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
         }
 
@@ -1360,9 +1368,7 @@ class petkit_feeder_plugin {
     }
 
     hb_deviceStatusLowBattery_get(petkitDevice, callback) {
-        const status = petkitDevice.status.batteryPower * globalVariables.config.batteryPersentPerLevel < 50 ?
-            Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW :
-            Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL;
+        const status = petkitDevice.getLowBatteryStatusForHomebridge();
         callback(null, status);
     }
 };
