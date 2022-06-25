@@ -240,14 +240,14 @@ class PetkitFeederDevice {
             } else {
                 return (this.status.food < globalVariables.config.foodStorage_alerm_threshold ? 0 : 1);
             }
-        } else if (this.config.get('model') === 'FeederMini' || this.config.get('model') === 'D4') {
-            if (this.config.get('reverse_foodStorage_indicator')) {
-                return (this.status.food != 1);
-            } else {
-                return (this.status.food == 1);
-            }
         } else {
-            return 0;
+            if (this.config.get('model') === 'FeederMini' || this.config.get('model') === 'D4') {
+                if (this.config.get('reverse_foodStorage_indicator')) {
+                    return (this.status.food === 1 ? 0 : 1);
+                } else {
+                    return (this.status.food === 1 ? 1 : 0);
+                }
+            }
         }
     }
     
@@ -491,9 +491,7 @@ class petkit_feeder_plugin {
             }
 
             service_status = petkitDevice.getFoodStatusForHomebridge();
-            food_storage_service.setCharacteristic(Characteristic.OccupancyDetected, service_status)
-            food_storage_service.getCharacteristic(Characteristic.OccupancyDetected)
-                .on('get', this.hb_foodStorageStatus_get.bind(this, petkitDevice));
+            food_storage_service.setCharacteristic(Characteristic.OccupancyDetected, service_status);
 
             petkitDevice.services.food_storage_service = food_storage_service;
         }
@@ -1101,22 +1099,14 @@ class petkit_feeder_plugin {
 
         // food
         service = petkitDevice.services.food_storage_service;
-        if (petkitDevice.config.get('model') === 'Feeder') {
-            if (petkitDevice.status.food > globalVariables.config.foodStorage_alerm_threshold) {
-                this.log.info('there is enough food left.');
-            } else {
-                this.log.warn('there is not enough food left !!!');
-            }
-        }
-        else if(petkitDevice.config.get('model') === 'FeederMini' || petkitDevice.config.get('model') === 'D4') {
-            if (petkitDevice.status.food == 0) {
-                this.log.warn('there is not enough food left !!!');
-            } else {
-                this.log.info('there is enough food left.');
-            }
-        }
         service_status = petkitDevice.getFoodStatusForHomebridge();
-        service.setCharacteristic(Characteristic.OccupancyDetected, service_status);
+        if (this.config.get('reverse_foodStorage_indicator')) {
+            this.log.info(format('there is {} food left.', service_status ? 'is not enough' : 'is enough'));    
+        } else {
+            this.log.info(format('there is {} food left.', service_status ? 'is enough' : 'is not enough'));
+        }
+        service.getCharacteristic(Characteristic.OccupancyDetected, service_status)
+            .updateValue(service_status);
 
         // desiccant
         if (petkitDevice.config.get('enable_desiccant')) {
