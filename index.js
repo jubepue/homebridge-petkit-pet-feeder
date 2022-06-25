@@ -1100,7 +1100,7 @@ class petkit_feeder_plugin {
         // food
         service = petkitDevice.services.food_storage_service;
         service_status = petkitDevice.getFoodStatusForHomebridge();
-        if (this.config.get('reverse_foodStorage_indicator')) {
+        if (petkitDevice.config.get('reverse_foodStorage_indicator')) {
             this.log.info(format('there is {} food left.', service_status ? 'is not enough' : 'is enough'));    
         } else {
             this.log.info(format('there is {} food left.', service_status ? 'is enough' : 'is not enough'));
