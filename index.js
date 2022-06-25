@@ -598,8 +598,6 @@ class petkit_feeder_plugin {
             
             service_status = petkitDevice.getLowBatteryStatusForHomebridge();
             battery_status_service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
-            battery_status_service.getCharacteristic(Characteristic.StatusLowBattery)
-                .on('get', this.hb_deviceStatusLowBattery_get.bind(this, petkitDevice));
             
             petkitDevice.services.battery_status_service = battery_status_service;
         }
@@ -1079,9 +1077,9 @@ class petkit_feeder_plugin {
             // low battery status
             service_status = petkitDevice.getLowBatteryStatusForHomebridge();
             this.log.info(format('battery level status is {}.', service_status ? 'low' : 'normal'));
-            service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
+            service.getCharacteristic(Characteristic.StatusLowBattery)
+                .updateValue(service_status);
         }
-
 
         // manualLock
         if (petkitDevice.config.get('enable_manualLock')) {
@@ -1364,11 +1362,6 @@ class petkit_feeder_plugin {
         const status = (petkitDevice.status.batteryStatus === 0 ?
             Characteristic.ChargingState.CHARGING :
             Characteristic.ChargingState.NOT_CHARGING);
-        callback(null, status);
-    }
-
-    hb_deviceStatusLowBattery_get(petkitDevice, callback) {
-        const status = petkitDevice.getLowBatteryStatusForHomebridge();
         callback(null, status);
     }
 };
