@@ -255,15 +255,15 @@ class PetkitFeederDevice {
         if (this.status.batteryPower * globalVariables.config.batteryPersentPerLevel <= 50) {
             if (this.status.batteryStatus === 0) {
                 if (this.config.get('ignore_battery_when_charging')) {
-                    return 1;
-                } else {
                     return 0;
+                } else {
+                    return 1;
                 }
             } else {
-                return 0;
+                return 1;
             }
         } else {
-            return 1;
+            return 0;
         }
     }
 };
@@ -1078,7 +1078,7 @@ class petkit_feeder_plugin {
 
             // low battery status
             service_status = petkitDevice.getLowBatteryStatusForHomebridge();
-            this.log.info(format('battery level status is {}.', service_status ? 'normal' : 'low'));
+            this.log.info(format('battery level status is {}.', service_status ? 'low' : 'normal'));
             service.setCharacteristic(Characteristic.StatusLowBattery, service_status);
         }
 
