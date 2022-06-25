@@ -9,6 +9,9 @@
   <a href="https://www.npmjs.com/package/homebridge-petkit-pet-feeder">
     <img src="https://flat.badgen.net/npm/dt/homebridge-petkit-pet-feeder" alt="Total NPM Downloads" />
   </a>
+  <a href="https://github.com/homebridge/homebridge/wiki/Verified-Plugins">
+    <img src="https://badgen.net/badge/homebridge/verified/purple" alt="verified-by-homebridge" />
+  </a>
   <br>
   <strong><a href="#2-how-to-setup">Setup Guide</a> | <a href="#4-how-to-contribute">Contribute</a> </strong>
 </p>
