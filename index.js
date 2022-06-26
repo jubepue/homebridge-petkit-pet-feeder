@@ -1261,12 +1261,7 @@ class petkit_feeder_plugin {
                     })
                 }, 1000);
             });
-    }
-
-    hb_foodStorageStatus_get(petkitDevice, callback) {
-        const status = petkitDevice.getFoodStatusForHomebridge();
-        callback(null, status);
-    }
+    }    
 
     hb_serviceStatus(petkitDevice, name, value, callback) {
         const settingName = name;
