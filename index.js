@@ -1224,16 +1224,6 @@ class petkit_feeder_plugin {
         // this.updataDeviceDetail();
     }
 
-    hb_desiccantIndicator_get(petkitDevice, callback) {
-        const status = (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('alert_desiccant_threshold') ? 1 : 0);
-        callback(null, status);
-    }
-
-    hb_desiccantLeftDays_get(petkitDevice, callback) {
-        const status = petkitDevice.status.desiccantLeftDays;
-        callback(null, status);
-    }
-
     // reset Desiccant Left Days 
     hb_desiccantLeftDays_reset(petkitDevice, callback) {
         const fast_response = petkitDevice.config.get('fast_response');
