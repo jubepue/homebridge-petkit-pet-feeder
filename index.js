@@ -544,8 +544,7 @@ class petkit_feeder_plugin {
 
             manualLock_service.setCharacteristic(Characteristic.On, petkitDevice.status.manualLock);
             manualLock_service.getCharacteristic(Characteristic.On)
-                .on('get', this.hb_manualLockStatus_get.bind(this, petkitDevice))
-                .on('set', this.hb_manualLockStatus_set.bind(this, petkitDevice));
+                .on('set', this.hb_serviceStatus.bind(this, petkitDevice, 'manualLock'));
 
             petkitDevice.services.manualLock_service = manualLock_service;
         }
@@ -565,9 +564,8 @@ class petkit_feeder_plugin {
 
             lightMode_service.setCharacteristic(Characteristic.On, petkitDevice.status.lightMode);
             lightMode_service.getCharacteristic(Characteristic.On)
-                .on('get', this.hb_lightModeStatus_get.bind(this, petkitDevice))
-                .on('set', this.hb_lightModeStatus_set.bind(this, petkitDevice));
-
+                .on('set', this.hb_serviceStatus.bind(this, petkitDevice, 'lightMode'));
+            
             petkitDevice.services.lightMode_service = lightMode_service;
         }
 
@@ -1073,12 +1071,9 @@ class petkit_feeder_plugin {
         if (petkitDevice.config.get('enable_manualLock')) {
             service = petkitDevice.services.manualLock_service;
             service_status = petkitDevice.status.manualLock;
-
             this.log.info(format('manualLock status is {}.', service_status ? 'on' : 'off'));
-            const current_status = service.getCharacteristic(Characteristic.On).value;
-            if (current_status != service_status) {
-                service.setCharacteristic(Characteristic.On, service_status);
-            }
+            service.getCharacteristic(Characteristic.On)
+                .updateValue(service_status);
         } else {
             this.log.info('manualLock function is disabled.');
         }
@@ -1087,12 +1082,9 @@ class petkit_feeder_plugin {
         if (petkitDevice.config.get('enable_lightMode')) {
             service = petkitDevice.services.lightMode_service;
             service_status = petkitDevice.status.lightMode;
-
             this.log.info(format('lightMode status is {}.', service_status ? 'on' : 'off'));
-            const current_status = service.getCharacteristic(Characteristic.On).value;
-            if (current_status != service_status) {
-                service.setCharacteristic(Characteristic.On, service_status);
-            }
+            service.getCharacteristic(Characteristic.On)
+                .updateValue(service_status);
         } else {
             this.log.info('lightMode function is disabled.');
         }
@@ -1276,44 +1268,8 @@ class petkit_feeder_plugin {
         callback(null, status);
     }
 
-    hb_manualLockStatus_get(petkitDevice, callback) {
-        const status = petkitDevice.status.manualLock ? 1 : 0;
-        callback(null, status);
-    }
-
-    hb_manualLockStatus_set(petkitDevice, value, callback) {
-        const settingName = 'manualLock';
-        const settingValue = (value ? 1 : 0);
-        const fast_response = petkitDevice.config.get('fast_response');
-        if (fast_response) callback(null);
-        this.log.debug(format('set {} to: {}', settingName, settingValue));
-        this.hb_handle_set_deviceSettings(petkitDevice, settingName, settingValue, result => {
-            if (result) {
-                this.log.info(format('set {} to: {}, success', settingName, settingValue));
-            } else {
-                this.log.warn(format('set {} to: {}, failed', settingName, settingValue));
-            }
-            if (!fast_response) callback(null);
-            setTimeout(() => {
-                this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
-                    this.uploadStatusToHomebridge(petkitDevice);
-                })
-            }, 1000);
-        });
-    }
-
-    hb_lightModeStatus_get(petkitDevice, callback) {
-        const status = petkitDevice.status.lightMode ? 1 : 0;
-        callback(null, status);
-
-        // this.hb_handle_get(petkitDevice, 'hb_lightModeStatus_get', results => {
-        //     const status = petkitDevice.status.lightMode;
-        //     callback(null, status);
-        // });
-    }
-
-    hb_lightModeStatus_set(petkitDevice, value, callback) {
-        const settingName = 'lightMode';
+    hb_serviceStatus(petkitDevice, name, value, callback) {
+        const settingName = name;
         const settingValue = (value ? 1 : 0);
         const fast_response = petkitDevice.config.get('fast_response');
         if (fast_response) callback(null);
