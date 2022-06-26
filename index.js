@@ -509,7 +509,7 @@ class petkit_feeder_plugin {
                 }
             }
 
-            service_status = (petkitDevice.status.desiccantLeftDays < this.alert_desiccant_threshold ? 1 : 0);
+            service_status = (petkitDevice.status.desiccantLeftDays < config.get('alert_desiccant_threshold') ? 1 : 0);
             desiccant_level_service.setCharacteristic(Characteristic.FilterChangeIndication, service_status);
             service_status = petkitDevice.status.desiccantLeftDays;
             desiccant_level_service.setCharacteristic(Characteristic.FilterLifeLevel, service_status);
