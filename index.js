@@ -1106,7 +1106,7 @@ class petkit_feeder_plugin {
                 if (petkitDevice.config.get('enable_autoreset_desiccant')) {
                     if (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('reset_desiccant_threshold')) {
                         this.hb_desiccantLeftDays_reset(petkitDevice, () => {
-                            service_status = 0;
+                            service.setCharacteristic(Characteristic.FilterChangeIndication, Characteristic.FilterChangeIndication.FILTER_OK);
                         });
                     } else {        
                         this.log.info(format('desiccant only {} day(s) left, reset it.', petkitDevice.status.desiccantLeftDays));
