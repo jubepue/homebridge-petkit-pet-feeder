@@ -1106,8 +1106,7 @@ class petkit_feeder_plugin {
                 if (petkitDevice.config.get('enable_autoreset_desiccant')) {
                     if (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('reset_desiccant_threshold')) {
                         this.hb_desiccantLeftDays_reset(petkitDevice, () => {
-                            service.getCharacteristic(Characteristic.FilterChangeIndication)
-                                .updateValue(0);
+                            service_status = 0;
                         });
                     } else {        
                         this.log.info(format('desiccant only {} day(s) left, reset it.', petkitDevice.status.desiccantLeftDays));
@@ -1253,7 +1252,7 @@ class petkit_feeder_plugin {
                 this.log.error('reset desiccant left days failed: ' + error);
             })
             .then(() => {
-                if (!fast_response && callback) callback(null);
+                if (!fast_response) callback(null);
                 setTimeout(() => {
                     this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
                         this.uploadStatusToHomebridge(petkitDevice);
