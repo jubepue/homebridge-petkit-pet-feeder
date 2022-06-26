@@ -520,7 +520,7 @@ class petkit_feeder_plugin {
                     minStep: 1
                 });
             desiccant_level_service.getCharacteristic(Characteristic.ResetFilterIndication)
-                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice));
+                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice, () => {}));
 
             petkitDevice.services.desiccant_level_service = desiccant_level_service;
         }
@@ -1105,9 +1105,8 @@ class petkit_feeder_plugin {
             if (service_status == 1) {
                 if (petkitDevice.config.get('enable_autoreset_desiccant')) {
                     if (petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('reset_desiccant_threshold')) {
-                        this.hb_desiccantLeftDays_reset(petkitDevice, () => {
-                            service.setCharacteristic(Characteristic.FilterChangeIndication, Characteristic.FilterChangeIndication.FILTER_OK);
-                        });
+                        service_status = 0;
+                        this.hb_desiccantLeftDays_reset(petkitDevice, () => {});
                     } else {        
                         this.log.info(format('desiccant only {} day(s) left, reset it.', petkitDevice.status.desiccantLeftDays));
                     }
@@ -1238,7 +1237,7 @@ class petkit_feeder_plugin {
     // reset Desiccant Left Days 
     hb_desiccantLeftDays_reset(petkitDevice, callback) {
         const fast_response = petkitDevice.config.get('fast_response');
-        if (fast_response && callback) {callback(null);}
+        if (fast_response) {callback(null);}
         this.http_resetDesiccant(petkitDevice)
             .then(data => {
                 if (data && data.result) {
