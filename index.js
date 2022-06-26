@@ -542,7 +542,8 @@ class petkit_feeder_plugin {
                 }
             }
 
-            manualLock_service.setCharacteristic(Characteristic.On, petkitDevice.status.manualLock);
+            service_status = petkitDevice.status.manualLock;
+            manualLock_service.setCharacteristic(Characteristic.On, service_status);
             manualLock_service.getCharacteristic(Characteristic.On)
                 .on('set', this.hb_serviceStatus.bind(this, petkitDevice, 'manualLock'));
 
@@ -562,7 +563,8 @@ class petkit_feeder_plugin {
                 }
             }
 
-            lightMode_service.setCharacteristic(Characteristic.On, petkitDevice.status.lightMode);
+            service_status = petkitDevice.status.lightMode;
+            lightMode_service.setCharacteristic(Characteristic.On, service_status);
             lightMode_service.getCharacteristic(Characteristic.On)
                 .on('set', this.hb_serviceStatus.bind(this, petkitDevice, 'lightMode'));
             
