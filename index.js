@@ -1118,7 +1118,7 @@ class petkit_feeder_plugin {
             } else {
                 this.log.info(format('desiccant has {} days left, no need to reset.', petkitDevice.status.desiccantLeftDays));
             }
-            service.gettCharacteristic(Characteristic.FilterChangeIndication)
+            service.getCharacteristic(Characteristic.FilterChangeIndication)
                 .updateValue(service_status);
         } else {
             this.log.info('desiccant service is disabled');
