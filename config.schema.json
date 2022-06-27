@@ -26,7 +26,7 @@
         "properties": {
           "location": {
             "title": "Server location, set this value corrent is very important becaus user data are not shared between servers.!",
-            "description": "• for China mainland users, select 'China mainland'.<br/>• for Asia users select 'Asia'.<br/>• for North America users select 'North America',<br/>• for Europe users select 'Europe'",
+            "description": "• for China mainland users, select 'China mainland'.<br/>• for Asia users select 'Asia'.<br/>• for International (United States/Europe) users select 'International'",
             "required": true,
             "type": "string",
             "default": "cn",
@@ -34,8 +34,7 @@
             "oneOf": [
               { "title": "China mainland", "enum": ["cn"] },
               { "title": "Asia", "enum": ["asia"] },
-              { "title": "North America", "enum": ["north_america"] },
-              { "title": "Europe", "enum": ["europe"] }
+              { "title": "International", "enum": ["international"] }
             ]
           },
           "model": {
