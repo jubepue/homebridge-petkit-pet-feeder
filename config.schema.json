@@ -34,7 +34,7 @@
             "oneOf": [
               { "title": "China mainland", "enum": ["cn"] },
               { "title": "Asia", "enum": ["asia"] },
-              { "title": "North America", "enum": ["north_america"] }
+              { "title": "North America", "enum": ["north_america"] },
               { "title": "Europe", "enum": ["europe"] }
             ]
           },
