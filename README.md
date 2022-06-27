@@ -45,7 +45,7 @@ control your petkit pet feeder from homekit, get full use of iOS automation.
 ### limitations
 
 - enable/disable meal plan for the day(may be in the next major version, currently no plan to do it).
-- currently this plugin for <a href="https://github.com/homebridge/homebridge">homebridge</a> just tested with <a href="https://petkit.com/products/fresh-element-solo/">Petkit feeder Element SOLO (official store link)</a>, and this plugin currently only tested and works in Asia(include China mainland), North America and Europe, other area may need more work.
+- currently this plugin for <a href="https://github.com/homebridge/homebridge">homebridge</a> just tested with <a href="https://petkit.com/products/fresh-element-solo/">Petkit feeder Element SOLO (official store link)</a>, and this plugin currently only tested and works in Asia(include China mainland), United States and Europe, other area may need more work.
 - to continuously use this plugin you should login Petkit app and never logoff, this plugin uses session id from the app and it will change every time you logoff and relogin.
 - because version >= 2.x.x is developed on a dynamic platform plugin, and not implement auto remove deleted device(s), so you may need to delete cached accessories manually.
 - ......
