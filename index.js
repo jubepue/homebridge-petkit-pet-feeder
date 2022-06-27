@@ -988,8 +988,11 @@ class petkit_feeder_plugin {
 
     // key see support_settings.
     async http_updateDeviceSettings(petkitDevice, key, value) {
-        const setting_key = globalVariables.support_settings[key];
+        let setting_key = globalVariables.support_settings[key];
         if (setting_key !== undefined) {
+            setting_key = (petkitDevice.config.get('model') !== 'D4') ?
+                'settings.' + setting_key :
+                setting_key;
             let data = {};
             data[setting_key] = value;
             const deviceId = petkitDevice.config.get('deviceId');
