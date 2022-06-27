@@ -355,12 +355,9 @@ class petkit_feeder_plugin {
         const model = config.get('model').toLowerCase();
         let url = undefined;
         if (service === 'owndevices') {
-            url = host + '/'
-                + config.get('urls').service;
+            url = host + config.get('urls')[service];
         } else {
-            url = host + '/'
-                + model
-                + config.get('urls').service;
+            url = host + '/' + model + config.get('urls')[service];
         }
         return url;
     }
