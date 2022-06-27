@@ -45,7 +45,7 @@ control your petkit pet feeder from homekit, get full use of iOS automation.
 ### limitations
 
 - enable/disable meal plan for the day(may be in the next major version, currently no plan to do it).
-- currently this plugin for <a href="https://github.com/homebridge/homebridge">homebridge</a> just tested with <a href="https://petkit.com/products/fresh-element-solo/">Petkit feeder Element SOLO (official store link)</a>, and this plugin currently only tested and works in Asia(include China mainland) and North America, other area may need more work.
+- currently this plugin for <a href="https://github.com/homebridge/homebridge">homebridge</a> just tested with <a href="https://petkit.com/products/fresh-element-solo/">Petkit feeder Element SOLO (official store link)</a>, and this plugin currently only tested and works in Asia(include China mainland), North America and Europe, other area may need more work.
 - to continuously use this plugin you should login Petkit app and never logoff, this plugin uses session id from the app and it will change every time you logoff and relogin.
 - because version >= 2.x.x is developed on a dynamic platform plugin, and not implement auto remove deleted device(s), so you may need to delete cached accessories manually.
 - ......
@@ -61,7 +61,7 @@ Goto App Store, download Petkit mobile app, register, login, add device. before 
 
 - for China mainland users, download “小佩宠物”
 - for those Asia users outside China mainland, you should download "PetKit(International)"
-- for users not from Asia, like America, Europe, etc. you also should download "PetKit(International)", but the API url address may not the same, this plugin may or may not works with you, if you are experienced in network, you could use "Quantumult X" to capture app network records, submit the api address to me or just create a PR or just modify this plugin for your own.
+- for users not from Asia, like United States, Europe, etc. you also should download "PetKit(International)", but the API url address may not the same, this plugin may or may not works with you, if you are experienced in network, you could use "Quantumult X" to capture app network records, submit the api address to me or just create a PR or just modify this plugin for your own.
 
 
 
@@ -101,7 +101,7 @@ you can find X-Session data from the request header area and deviceId in respons
 
 |           field   name            |  type  | required |                  default                   |                range                | description                                                  |
 | :-------------------------------: | :----: | :------: | :----------------------------------------: | :---------------------------------: | ------------------------------------------------------------ |
-|             location              | string |   yes    |                    'cn'                    | 'cn',<br>'asia',<br>'north_america' | China users:'cn';<br>Asia users: 'asia';<br>North America users: 'north_america';<br>other location because lack of infomation, not sure it will work.<br/>You can find more info <a href="https://github.com/jubepue/homebridge-petkit-pet-feeder/wiki/How-to-choose-server-location">here</a>. |
+|             location              | string |   yes    |                    'cn'                    | 'cn',<br>'asia',<br>'international' | China users:'cn';<br>Asia users: 'asia';<br>International (United States/Europe) users: 'international';<br>other location because lack of infomation, not sure it will work.<br/>You can find more info <a href="https://github.com/jubepue/homebridge-petkit-pet-feeder/wiki/How-to-choose-server-location">here</a>. |
 |               model               | string |    no    |                'D4'                        |      'FeederMini',<br>'Feeder',<br>'D4' | Petkit Feeder Mini: 'FeederMini'<br>Petkit Feeder Element: 'Feeder'<br>Petkit Feeder Element SOLO: 'D4' |
 |             deviceId              | string |   tbd    |                    ---                     |                 ---                 | your Petkit feeder element SOLO Id, which is buildin your device, will never change. <br/>If you just have one Petkit feeder device, you can ignore this value.<br/>If you just have more than one Petkit Feeder device, you must set this value. |
 |              headers              | array  |   yes    |                    ---                     |                 ---                 | http request headers.<br/>See more detail info at <a href="#headers-field">headers field</a> below. |
@@ -149,7 +149,7 @@ we recomand you entered all the headers you captured. If you don't want to do so
             "value": "xxxxxx"
           }
         ],
-        "location": "north_america",
+        "location": "international",
         "model": "D4",
         "enable_http_retry": false,
         "http_retry_count": 3,
