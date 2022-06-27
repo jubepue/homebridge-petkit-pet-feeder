@@ -26,15 +26,16 @@
         "properties": {
           "location": {
             "title": "Server location, set this value corrent is very important becaus user data are not shared between servers.!",
-            "description": "• for China mainland users, select 'China mainland'.<br/>• for Asia users select 'Asia'.<br/>• for North America users select 'North America'",
+            "description": "• for China mainland users, select 'China mainland'.<br/>• for Asia users select 'Asia'.<br/>• for North America users select 'North America',<br/>• for Europe users select 'Europe'",
             "required": true,
             "type": "string",
             "default": "cn",
-            "placeholder": "China mainland",
+            "placeholder": "Europe",
             "oneOf": [
               { "title": "China mainland", "enum": ["cn"] },
               { "title": "Asia", "enum": ["asia"] },
               { "title": "North America", "enum": ["north_america"] }
+              { "title": "Europe", "enum": ["europe"] }
             ]
           },
           "model": {
@@ -42,8 +43,8 @@
             "description": "• for Petkit Feeder Element users, select 'Petkit Feeder Element'.<br/>• for Petkit Feeder Mini users select 'Petkit Feeder Mini'. <br/>• for Petkit Feeder Element SOLO users select 'Petkit Feeder SOLO'",
             "required": true,
             "type": "string",
-            "default": "FeederMini",
-            "placeholder": "Petkit Feeder Mini",
+            "default": "D4",
+            "placeholder": "Petkit Feeder SOLO",
             "oneOf": [
                 { "title": "Petkit Feeder Element", "enum": ["Feeder"] },
                 { "title": "Petkit Feeder Mini", "enum": ["FeederMini"] },
