@@ -1156,7 +1156,7 @@ class petkit_feeder_plugin {
             
             setTimeout(() => {
                 petkitDevice.services.drop_meal_service.getCharacteristic(Characteristic.On).updateValue(0);
-            }, 200);
+            }, 1000);
 
             setTimeout(() => {
                 this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
