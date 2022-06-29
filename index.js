@@ -383,8 +383,6 @@ class petkit_feeder_plugin {
                 }
             }
 
-            service_status = 0;
-            drop_meal_service.setCharacteristic(Characteristic.On, service_status);
             drop_meal_service.getCharacteristic(Characteristic.On)
                 .on('get', callback => callback(null, 0))
                 .on('set', this.hb_dropMeal_set.bind(this, petkitDevice));
