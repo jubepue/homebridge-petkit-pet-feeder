@@ -383,6 +383,8 @@ class petkit_feeder_plugin {
                 }
             }
 
+            service_status = 0;
+            drop_meal_service.setCharacteristic(Characteristic.On, service_status);
             drop_meal_service.getCharacteristic(Characteristic.On)
                 .on('get', callback => callback(null, 0))
                 .on('set', this.hb_dropMeal_set.bind(this, petkitDevice));
@@ -460,7 +462,7 @@ class petkit_feeder_plugin {
                     minStep: 1
                 });
             desiccant_level_service.getCharacteristic(Characteristic.ResetFilterIndication)
-                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice, () => {}));
+                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice));
 
             petkitDevice.services.desiccant_level_service = desiccant_level_service;
         }
@@ -1155,7 +1157,7 @@ class petkit_feeder_plugin {
             }
             
             setTimeout(() => {
-                petkitDevice.services.drop_meal_service.setCharacteristic(Characteristic.On, false);
+                petkitDevice.services.drop_meal_service.getCharacteristic(Characteristic.On).updateValue(0);
             }, 200);
 
             setTimeout(() => {
@@ -1170,7 +1172,7 @@ class petkit_feeder_plugin {
     // reset Desiccant Left Days 
     hb_desiccantLeftDays_reset(petkitDevice, callback) {
         const fast_response = petkitDevice.config.get('fast_response');
-        if (fast_response) {callback(null);}
+        if (fast_response) callback(null);
         this.http_resetDesiccant(petkitDevice)
             .then(data => {
                 if (data && data.result) {
