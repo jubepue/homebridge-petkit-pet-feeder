@@ -383,8 +383,8 @@ class petkit_feeder_plugin {
                 }
             }
 
+            drop_meal_service.setCharacteristic(Characteristic.On, 0);
             drop_meal_service.getCharacteristic(Characteristic.On)
-                .on('get', callback => callback(null, 0))
                 .on('set', this.hb_dropMeal_set.bind(this, petkitDevice));
 
             petkitDevice.services.drop_meal_service = drop_meal_service;
@@ -403,10 +403,9 @@ class petkit_feeder_plugin {
                 }
             }
 
-            meal_amount_service.getCharacteristic(Characteristic.On)
-                .on('get', callback => callback(null, petkitDevice.savedData.mealAmount !== 0));
+            meal_amount_service.setCharacteristic(Characteristic.On, petkitDevice.savedData.mealAmount !== 0);
+            meal_amount_service.setCharacteristic(Characteristic.RotationSpeed, petkitDevice.savedData.mealAmount);
             meal_amount_service.getCharacteristic(Characteristic.RotationSpeed)
-                .on('get', callback => callback(null, petkitDevice.savedData.mealAmount))
                 .on('set', this.hb_mealAmount_set.bind(this, petkitDevice))
                 .setProps({
                     minValue: globalVariables.config.min_amount,
@@ -1146,17 +1145,15 @@ class petkit_feeder_plugin {
                     })
                     .catch(error => {
                         this.log.error('food drop failed: ' + error);
-                    })
-                    .then(() => {
-                        if (!fast_response) callback(null);
                     });
             } else {
                 this.log.info('drop food with zero amount, pass.');
-            }
+            }  
+            if (!fast_response) callback(null);
             
             setTimeout(() => {
                 petkitDevice.services.drop_meal_service.getCharacteristic(Characteristic.On).updateValue(0);
-            }, 1000);
+            }, 500);
 
             setTimeout(() => {
                 this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
