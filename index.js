@@ -459,7 +459,7 @@ class petkit_feeder_plugin {
                     minStep: 1
                 });
             desiccant_level_service.getCharacteristic(Characteristic.ResetFilterIndication)
-                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice));
+                .on('set', this.hb_desiccantLeftDays_reset.bind(this, petkitDevice, () => {}));
 
             petkitDevice.services.desiccant_level_service = desiccant_level_service;
         }
@@ -1059,6 +1059,9 @@ class petkit_feeder_plugin {
                 this.log.info(format('desiccant has {} days left, no need to reset.', petkitDevice.status.desiccantLeftDays));
             }
             service.getCharacteristic(Characteristic.FilterChangeIndication)
+                .updateValue(service_status);
+            service_status = petkitDevice.status.desiccantLeftDays;
+            service.getCharacteristic(Characteristic.FilterLifeLevel)
                 .updateValue(service_status);
         } else {
             this.log.info('desiccant service is disabled');
