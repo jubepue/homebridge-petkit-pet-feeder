@@ -47,7 +47,8 @@
             "oneOf": [
                 { "title": "Petkit Feeder Element", "enum": ["Feeder"] },
                 { "title": "Petkit Feeder Mini", "enum": ["FeederMini"] },
-                { "title": "Petkit Feeder SOLO", "enum": ["D4"] }
+                { "title": "Petkit Feeder SOLO", "enum": ["D4"] },
+                { "title": "Petkit Feeder Infiniti", "enum": ["D3"] }
             ]
           },
           "deviceId": {
