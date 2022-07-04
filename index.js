@@ -18,6 +18,7 @@ const globalVariables = Object.freeze({
         'Feeder',                           // Petkit Feeder Element
         'FeederMini',                       // Petkit Feeder Mini
         'D4'                                // Perkit Feeder Element SOLO
+        'D3'                                // Perkit Feeder Element Infiniti
     ],
     'support_settings': {
         'Feeder': {
@@ -29,6 +30,10 @@ const globalVariables = Object.freeze({
             'lightMode' : 'settings.lightMode',
         },
         'D4': {
+            'manualLock' : 'manualLock',
+            'lightMode' : 'lightMode',
+        },
+        'D3': {
             'manualLock' : 'manualLock',
             'lightMode' : 'lightMode',
         },
@@ -83,6 +88,17 @@ const globalVariables = Object.freeze({
             'updateSettings': '/update?id={}&kv={}',
         },
         'D4': {
+            'owndevices': '/discovery/device_roster',
+            'deviceState': '/devicestate?id={}',
+            'deviceDetailInfo': '/device_detail?id={}',
+            'saveDailyFeed': '/saveDailyFeed?deviceId={}&day={}&time={}&amount={}',              'removeDailyFeed': 'http://api.petkit.cn/6/feeder/remove_dailyfeed?deviceId={}&day={}&id=d{}',
+            'dailyfeeds': '/dailyFeeds?deviceId={}&days={}',
+            'restoreDailyFeeds': '/restoreDailyFeed?deviceId={}&day={}&id=s{}',
+            'disableDailyFeeds': '/removeDailyFeed?deviceId={}&day={}&id=s{}',
+            'resetDesiccant': '/desiccantReset?deviceId={}',
+            'updateSettings': '/updateSettings?id={}&kv={}',
+        },
+        'D3': {
             'owndevices': '/discovery/device_roster',
             'deviceState': '/devicestate?id={}',
             'deviceDetailInfo': '/device_detail?id={}',
@@ -173,12 +189,10 @@ class PetkitFeederDevice {
                 return (this.status.food < globalVariables.config.foodStorage_alerm_threshold ? 0 : 1);
             }
         } else {
-            if (this.config.get('model') === 'FeederMini' || this.config.get('model') === 'D4') {
-                if (this.config.get('reverse_foodStorage_indicator')) {
-                    return (this.status.food === 1 ? 0 : 1);
-                } else {
-                    return (this.status.food === 1 ? 1 : 0);
-                }
+            if (this.config.get('reverse_foodStorage_indicator')) {
+                return (this.status.food === 1 ? 0 : 1);
+            } else {
+                return (this.status.food === 1 ? 1 : 0);
             }
         }
     }
