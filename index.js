@@ -17,7 +17,7 @@ const globalVariables = Object.freeze({
     'support_device_type': [                // valid petkit feeder device type
         'Feeder',                           // Petkit Feeder Element
         'FeederMini',                       // Petkit Feeder Mini
-        'D4'                                // Perkit Feeder Element SOLO
+        'D4',                               // Perkit Feeder Element SOLO
         'D3'                                // Perkit Feeder Element Infiniti
     ],
     'support_settings': {
