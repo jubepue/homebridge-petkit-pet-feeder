@@ -39,7 +39,7 @@
           },
           "model": {
             "title": "Petkit feeder model",
-            "description": "• for Petkit Feeder Element users, select 'Petkit Feeder Element'.<br/>• for Petkit Feeder Mini users select 'Petkit Feeder Mini'. <br/>• for Petkit Feeder Element SOLO users select 'Petkit Feeder SOLO'",
+            "description": "• for Petkit Feeder Element users, select 'Petkit Feeder Element'.<br/>• for Petkit Feeder Mini users select 'Petkit Feeder Mini'. <br/>• for Petkit Feeder Element SOLO users select 'Petkit Feeder SOLO'.<br/>• for Petkit Feeder Element Infiniti users select 'Petkit Feeder Infiniti'",
             "required": true,
             "type": "string",
             "default": "D4",
