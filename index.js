@@ -20,10 +20,18 @@ const globalVariables = Object.freeze({
         'D4'                                // Perkit Feeder Element SOLO
     ],
     'support_settings': {
-        // 'manualLock' : 'settings.manualLock',
-        // 'lightMode' : 'settings.lightMode',
-        'manualLock' : 'manualLock',
-        'lightMode' : 'lightMode'
+        'Feeder': {
+            'manualLock' : 'settings.manualLock',
+            'lightMode' : 'settings.lightMode',
+        },
+        'FeederMini': {
+            'manualLock' : 'settings.manualLock',
+            'lightMode' : 'settings.lightMode',
+        },
+        'D4': {
+            'manualLock' : 'manualLock',
+            'lightMode' : 'lightMode',
+        },
     },
     'default_headers': {
         'X-Client': 'ios(15.5;iPhone12,3)',
@@ -301,6 +309,9 @@ class petkit_feeder_plugin {
         
         // urls
         conf.set('urls', globalVariables.global_urls[device_model]);
+        
+        // settings
+        conf.set('settings', globalVariables.support_settings[device_model]);
 
         // optional configure items
         // conf.fulfill('name', 'PetkitFeederMini');
@@ -927,11 +938,8 @@ class petkit_feeder_plugin {
 
     // key see support_settings.
     async http_updateDeviceSettings(petkitDevice, key, value) {
-        let setting_key = globalVariables.support_settings[key];
-        if (setting_key !== undefined) {
-            setting_key = (petkitDevice.config.get('model') !== 'D4') ?
-                'settings.' + setting_key :
-                setting_key;
+        let setting_key = petkitDevice.config.get('settings')[key];
+        if (setting_key !== undefined) {    
             let data = {};
             data[setting_key] = value;
             const deviceId = petkitDevice.config.get('deviceId');
@@ -984,6 +992,10 @@ class petkit_feeder_plugin {
         let service_status = undefined;
 
         this.log.debug(JSON.stringify(petkitDevice.status));
+        
+        // meal drop service
+        service = petkitDevice.services.drop_meal_service;
+        service.getCharacteristic(Characteristic.On).updateValue(0);
 
         // battery service only for Petkit Feeder Mini
         if (petkitDevice.config.get('model') === 'FeederMini' || petkitDevice.config.get('model') === 'D4') {
@@ -1123,7 +1135,8 @@ class petkit_feeder_plugin {
         const fast_response = petkitDevice.config.get('fast_response');
         if (fast_response) callback(null);
         if (value) {
-            if (petkitDevice.savedData.mealAmount) {
+            if (petkitDevice.savedData.mealAmount && 
+                petkitDevice.services.meal_amount_service.getCharacteristic(Characteristic.On).value) {) {
                 this.log.info(format('drop food:{} meal(s)', petkitDevice.savedData.mealAmount));
 
                 var result = false;
@@ -1152,11 +1165,7 @@ class petkit_feeder_plugin {
             } else {
                 this.log.info('drop food with zero amount, pass.');
             }  
-            if (!fast_response) callback(null);
-            
-            setTimeout(() => {
-                petkitDevice.services.drop_meal_service.getCharacteristic(Characteristic.On).updateValue(0);
-            }, 500);
+            if (!fast_response) callback(null); 
 
             setTimeout(() => {
                 this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
