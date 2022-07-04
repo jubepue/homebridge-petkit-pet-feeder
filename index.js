@@ -1150,7 +1150,7 @@ class petkit_feeder_plugin {
         if (fast_response) callback(null);
         if (value) {
             if (petkitDevice.savedData.mealAmount && 
-                petkitDevice.services.meal_amount_service.getCharacteristic(Characteristic.On).value) {) {
+                petkitDevice.services.meal_amount_service.getCharacteristic(Characteristic.On).value) {
                 this.log.info(format('drop food:{} meal(s)', petkitDevice.savedData.mealAmount));
 
                 var result = false;
