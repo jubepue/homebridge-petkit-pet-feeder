@@ -146,7 +146,7 @@ class PetkitFeederDevice {
             'lastUpdate': 0,
             'food' : 0,                 // this.config.get('reverse_foodStorage_indicator') ? !petkitDevice.status.food : petkitDevice.status.food
             'batteryPower': 0,  
-            'batteryStatus': 1,
+            'batteryStatus': undefined,
             'desiccantLeftDays' : 0,    // petkitDevice.status.desiccantLeftDays < petkitDevice.config.get('alert_desiccant_threshold') ? 1 : 0
             'manualLock': 0,
             'lightMode': 0,
@@ -532,7 +532,7 @@ class petkit_feeder_plugin {
         }
 
         // setup battery status service
-        if (petkitDevice.config.get('model') === 'FeederMini' || petkitDevice.config.get('model') === 'D4') {
+        if (petkitDevice.status.batteryStatus !== undefined) {
             service_name = config.get('Battery_name');
             let battery_status_service = accessory.getService(service_name);
             if (!battery_status_service) {
