@@ -3,6 +3,9 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/jubepue/homebridge-petkit-pet-feeder/master/images/petkit-pet-feeder.jpg">
   <br>
+  <a href="https://www.oscs1024.com/project/oscs/jubepue/homebridge-petkit-pet-feeder?ref=badge_small" alt="OSCS Status">
+    <img src="https://www.oscs1024.com/platform/badge/jubepue/homebridge-petkit-pet-feeder.svg?size=small"/></a>
+  <br>
   <a href="https://www.npmjs.com/package/homebridge-petkit-pet-feeder">
     <img src="https://flat.badgen.net/npm/v/homebridge-petkit-pet-feeder" alt="NPM Version" />
   </a>
