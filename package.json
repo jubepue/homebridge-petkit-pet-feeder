@@ -1,7 +1,7 @@
 {
   "name": "homebridge-petkit-pet-feeder",
   "description": "control all your types of petkit pet feeders from homekit, get full use of iOS automation.",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "main": "index.js",
   "scripts": {
     "test-homebridge": "/usr/bin/homebridge -P ./ -I -U /var/lib/homebridge",
