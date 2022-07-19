@@ -566,7 +566,7 @@ class petkit_feeder_plugin {
         if (service_status) {
             this.log.info(petkitDevice.status.errorDetail);
         };
-        service.getCharacteristic(Characteristic.ContactSensorState)
+        service.getCharacteristic(Characteristic.OccupancyDetected)
             .updateValue(service_status);
 
         // desiccant
@@ -839,7 +839,7 @@ class petkit_feeder_plugin {
         let block_door_service = accessory.getService(service_name);
         if (!block_door_service) {
             // service not exist, create service
-            block_door_service = accessory.addService(Service.ContactSensor, service_name, service_name);
+            block_door_service = accessory.addService(Service.OccupancySensor, service_name, service_name);
             if (!block_door_service) {
                 this.log.error('petkit device service create failed: ' + service_name);
                 return false;
@@ -847,7 +847,7 @@ class petkit_feeder_plugin {
         };
 
         service_status = (petkitDevice.status.errorCode === 'blk_d' ? 1 : 0);
-        block_door_service.setCharacteristic(Characteristic.ContactSensorState, service_status);
+        block_door_service.setCharacteristic(Characteristic.OccupancyDetected, service_status);
 
         petkitDevice.services.block_door_service = block_door_service;
         
