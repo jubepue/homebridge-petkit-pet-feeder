@@ -113,6 +113,7 @@ you can find X-Session data from the request header area and deviceId in respons
 |          ManualLock_name          | string |    no    |                'ManualLock'                |                 ---                 | name of ManualLock switch in HomeKit.                        |
 |          LightMode_name           | string |    no    |                'LightMode'                 |                 ---                 | name of LightMode switch in HomeKit.                         |
 |           Battery_name            | string |    no    |                 'Battery'                  |                 ---                 | name of Battery indicator in HomeKit.                        |
+|           BlockDoor_name            | string |    no    |                 'BlockDoor'                  |                 ---                 | name of BlockDoor indicator in HomeKit.                        |
 |          enable_polling           |  bool  |    no    |                    true                    |             true/false              | Automatically update device info from Petkit server.         |
 |         polling_interval          |  int   |    no    |                     60                     |             60 to 3600              | update device info interval from Petkit server(s).           |
 |         enable_manualLock         |  bool  |    no    |                   false                    |             true/false              | if enabled, a switch will show in homekit to control the manual lock of the feeder. |
