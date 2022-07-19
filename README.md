@@ -44,7 +44,6 @@ control your petkit pet feeder from homekit, get full use of iOS automation.
 
 ### limitations
 
-- enable/disable meal plan for the day(may be in the next major version, currently no plan to do it).
 - currently this plugin for <a href="https://github.com/homebridge/homebridge">homebridge</a> just tested with <a href="https://petkit.com/products/fresh-element-solo/">Petkit feeder Element SOLO (official store link)</a>, and this plugin currently only tested and works in Asia(include China mainland), United States and Europe, other area may need more work.
 - to continuously use this plugin you should login Petkit app and never logoff, this plugin uses session id from the app and it will change every time you logoff and relogin.
 - because version >= 2.x.x is developed on a dynamic platform plugin, and not implement auto remove deleted device(s), so you may need to delete cached accessories manually.
@@ -121,6 +120,9 @@ you can find X-Session data from the request header area and deviceId in respons
 | reverse_foodStorage<br>_indicator |  bool  |    no    |                   false                    |             true/false              | normally, the occupancy will show an alert in homekit when there is enough food in the feeder, in which situation may not so recognizable, so you can reverse the status but set this value to true, so when there is not much food, it can show an alert in homekit. |
 | ignore_battery_when<br/>_charging |  bool  |    no    |                   false                    |             true/false              | Ignore battery low level alerm when device connected to a power source.<br>And battery function is disabled when using a Petkit Feeder Element device. |
 |           fast_response           |  bool  |    no    |                   false                    |             true/false              | if set to true, then when received a Homekit set request, return immediately, ignore the result.<br>this is useful when your homebridge or Petkit device has a bad internet connection. |
+|              feed_daily_list              | array  |   no    |                    ---                     |                 ---                 | feed daily list.<br/>See more detail info at <a href="#feed-daily-list-field">feed daily list field</a> below. |
+|          enabled_daily_feeds        |  bool  |   no   |                    true                    |             true/false              | enable/disable feed daily plan.<br>(the choice is for every day of the week.  |
+|          overwrite_daily_feeds        |  bool  |   no   |                    true                    |             true/false              | overwite feed daily plan with the data of this plugin.  |
 
 
 
@@ -134,6 +136,14 @@ you can find X-Session data from the request header area and deviceId in respons
 
 we recomand you entered all the headers you captured. If you don't want to do so, please ensure header "X-Session" is correctly entered.
 
+
+### feed daily list field
+
+| field   name  |  type  | required | default  |   range   | description                                                                                                                                                                                                       |
+| :-----------: | :----: | :------: | :------: | :-------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  name   | string |   no    |  ---  |    ---     |       food name.            |    
+| amount  |   int  |   no    |   1   |    1-10    |     amount food dispensed.  |
+|  time   |  int   |   no    |   1   | 1 to 86400 | time in seconds the food will be dispensed. |
 
 
 ### example of config.json file
@@ -169,7 +179,26 @@ we recomand you entered all the headers you captured. If you don't want to do so
         "enable_manualLock": true,
         "enable_lightMode": true,
         "reverse_foodStorage_indicator": true,
-        "fast_response": true
+        "fast_response": true,
+        "enabled_daily_feeds": true,
+        "overwrite_daily_feeds": true,
+        "feed_daily_list": [
+            {
+                "name": "Desayuno",
+                "amount": 8,
+                "time": 25200
+            },
+            {
+                "name": "Comida",
+                "amount": 6,
+                "time": 46800
+            },
+            {
+                "name": "Cena",
+                "amount": 8,
+                "time": 72000
+            }
+        ]
       }
   ],
   "platform": "petkit_pet_feeder"
