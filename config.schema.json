@@ -132,6 +132,13 @@
             "default": "MealAmount",
             "placeholder": "MealAmount"
           },
+          "FeedDaily_name": {
+            "title": "Name of Feed Daily Switch shows in HomeKit",
+            "required": false,
+            "type": "string",
+            "default": "FeedDaily",
+            "placeholder": "FeedDaily"
+          },
           "FoodStorage_name": {
             "title": "Name of FoodStorage Service shows in HomeKit",
             "required": false,
@@ -242,6 +249,49 @@
             "type": "boolean",
             "default": false,
             "placeholder": "false"
+          },
+          "enabled_daily_feeds": {
+            "title": "Enable feed daily scheduled.",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          "overwrite_daily_feeds": {
+            "title": "Overwrite feed daily scheduled.",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          "feed_daily_list": {
+            "title": "Feed Daily List",
+            "type": "array",
+            "required": false,
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "title": "Name",
+                  "type": "string",
+                  "required": false
+                },
+                "amount": {
+                  "title": "Amount",
+                  "required": false,
+                  "type": "integer",
+                  "default": 1,
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                "time": {
+                  "title": "Time of day in seconds",
+                  "required": false,
+                  "type": "integer",
+                  "default": 1,
+                  "minimum": 1,
+                  "maximum": 86400
+                }
+              }
+            }
           }
         }
       }
@@ -317,6 +367,7 @@
                 },
                 "devices[].DropMeal_name",
                 "devices[].MealAmount_name",
+                "devices[].FeedDaily_name",
                 "devices[].FoodStorage_name",
                 "devices[].DesiccantLevel_name",
                 "devices[].ManualLock_name",
@@ -344,6 +395,34 @@
               "items": [
                 "devices[].enable_polling",
                 "devices[].polling_interval"
+              ]
+            },
+            {
+              "type": "section",
+              "expandable": true,
+              "expanded": false,
+              "title": "Feed Daily List",
+              "items": [
+                {
+                  "key": "devices[].feed_daily_list",
+                  "type": "array",
+                  "orderable": false,
+                  "buttonText": "Add Feed Time",
+                  "items": [
+                    {
+                      "type": "div",
+                      "displayFlex": true,
+                      "flex-direction": "row",
+                      "items": [
+                          "devices[].feed_daily_list[].name",
+                          "devices[].feed_daily_list[].amount",
+                          "devices[].feed_daily_list[].time"
+                      ]
+                    }
+                  ]
+                }, 
+                "devices[].enabled_daily_feeds",
+                "devices[].overwrite_daily_feeds"
               ]
             },
             {
