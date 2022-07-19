@@ -254,7 +254,7 @@
             "title": "Enable feed daily scheduled.",
             "required": false,
             "type": "boolean",
-            "default": true
+            "default": false
           },
           "overwrite_daily_feeds": {
             "title": "Overwrite feed daily scheduled.",
