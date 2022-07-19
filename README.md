@@ -121,7 +121,7 @@ you can find X-Session data from the request header area and deviceId in respons
 | ignore_battery_when<br/>_charging |  bool  |    no    |                   false                    |             true/false              | Ignore battery low level alerm when device connected to a power source.<br>And battery function is disabled when using a Petkit Feeder Element device. |
 |           fast_response           |  bool  |    no    |                   false                    |             true/false              | if set to true, then when received a Homekit set request, return immediately, ignore the result.<br>this is useful when your homebridge or Petkit device has a bad internet connection. |
 |              feed_daily_list              | array  |   no    |                    ---                     |                 ---                 | feed daily list.<br/>See more detail info at <a href="#feed-daily-list-field">feed daily list field</a> below. |
-|          enabled_daily_feeds        |  bool  |   no   |                    true                    |             true/false              | enable/disable feed daily plan.<br>(the choice is for every day of the week.  |
+|          enabled_daily_feeds        |  bool  |   yes   |                    true                    |             true/false              | enable/disable feed daily plan.<br>(the choice is for every day of the week.  |
 |          overwrite_daily_feeds        |  bool  |   no   |                    true                    |             true/false              | overwite feed daily plan with the data of this plugin.  |
 
 
