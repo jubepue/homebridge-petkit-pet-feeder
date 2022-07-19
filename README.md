@@ -113,7 +113,7 @@ you can find X-Session data from the request header area and deviceId in respons
 |          ManualLock_name          | string |    no    |                'ManualLock'                |                 ---                 | name of ManualLock switch in HomeKit.                        |
 |          LightMode_name           | string |    no    |                'LightMode'                 |                 ---                 | name of LightMode switch in HomeKit.                         |
 |           Battery_name            | string |    no    |                 'Battery'                  |                 ---                 | name of Battery indicator in HomeKit.                        |
-|           BlockDoor_name            | string |    no    |                 'BlockDoor'                  |                 ---                 | name of BlockDoor indicator in HomeKit.                        |
+|           BlockDoor_name          | string |    no    |                 'BlockDoor'                |                 ---                 | name of BlockDoor indicator in HomeKit.                      |
 |          enable_polling           |  bool  |    no    |                    true                    |             true/false              | Automatically update device info from Petkit server.         |
 |         polling_interval          |  int   |    no    |                     60                     |             60 to 3600              | update device info interval from Petkit server(s).           |
 |         enable_manualLock         |  bool  |    no    |                   false                    |             true/false              | if enabled, a switch will show in homekit to control the manual lock of the feeder. |
@@ -121,9 +121,9 @@ you can find X-Session data from the request header area and deviceId in respons
 | reverse_foodStorage<br>_indicator |  bool  |    no    |                   false                    |             true/false              | normally, the occupancy will show an alert in homekit when there is enough food in the feeder, in which situation may not so recognizable, so you can reverse the status but set this value to true, so when there is not much food, it can show an alert in homekit. |
 | ignore_battery_when<br/>_charging |  bool  |    no    |                   false                    |             true/false              | Ignore battery low level alerm when device connected to a power source.<br>And battery function is disabled when using a Petkit Feeder Element device. |
 |           fast_response           |  bool  |    no    |                   false                    |             true/false              | if set to true, then when received a Homekit set request, return immediately, ignore the result.<br>this is useful when your homebridge or Petkit device has a bad internet connection. |
-|              feed_daily_list              | array  |   no    |                    ---                     |                 ---                 | feed daily list.<br/>See more detail info at <a href="#feed-daily-list-field">feed daily list field</a> below. |
-|          enabled_daily_feeds        |  bool  |   no   |                    true                    |             true/false              | enable/disable feed daily plan.<br>(the choice is for every day of the week.  |
-|          overwrite_daily_feeds        |  bool  |   no   |                    false                    |             true/false              | overwite feed daily plan with the data of this plugin.  |
+|         feed_daily_list           | array  |    no    |                    ---                     |                 ---                 | feed daily list.<br/>See more detail info at <a href="#feed-daily-list-field">feed daily list field</a> below. |
+|          enabled_daily_feeds      |  bool  |    no    |                    true                    |             true/false              | enable/disable feed daily plan.<br>(the choice is for every day of the week.  |
+|          overwrite_daily_feeds    |  bool  |    no    |                    false                   |             true/false              | overwite feed daily plan with the data of this plugin.  |
 
 
 
@@ -140,11 +140,11 @@ we recomand you entered all the headers you captured. If you don't want to do so
 
 ### feed daily list field
 
-| field   name  |  type  | required | default  |   range   | description                                                                                                                                                                                                       |
-| :-----------: | :----: | :------: | :------: | :-------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  name   | string |   no    |  ---  |    ---     |       food name.            |    
-| amount  |   int  |   no    |   1   |    1-10    |     amount food dispensed.  |
-|  time   |  int   |   no    |   1   | 1 to 86400 | time in seconds the food will be dispensed. |
+| field   name  |  type  | required | default  |   range    | description                                                                                                                                                                                                       |
+| :-----------: | :----: | :------: | :------: | :-------:  | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     name      | string |    no    |    ---   |    ---     |       food name. |    
+|    amount     |   int  |    no    |     1    |    1-10    |     amount food dispensed. |
+|     time      |  int   |    no    |     1    | 1 to 86400 | time in seconds the food will be dispensed. |
 
 
 ### example of config.json file
@@ -171,6 +171,7 @@ we recomand you entered all the headers you captured. If you don't want to do so
         "ManualLock_name": "ManualLock",
         "LightMode_name": "LightMode",
         "Battery_name": "Battery",
+        "BlockDoor_name": "BlockDoor",
         "enable_polling": true,
         "polling_interval": 60,
         "enable_desiccant": true,
