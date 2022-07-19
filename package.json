@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-petkit-pet-feederr",
+  "name": "homebridge-petkit-pet-feeder",
   "description": "control all your types of petkit pet feeders from homekit, get full use of iOS automation.",
   "version": "2.5.0",
   "main": "index.js",
