@@ -174,7 +174,7 @@ class petkit_feeder_plugin {
             return;
         };
         this.api = api;
-        this.accessories = new Map();
+        this.accessories = [];
 
         if (!config || !config.devices) {
             this.log.error("No configuration found.");
@@ -194,14 +194,7 @@ class petkit_feeder_plugin {
             this.log.info('Petkit feeder platform loaded.');
         };
     };
-
-    configureAccessory(accessory) {
-        const petkitDevice = Object.assign(new petkitFeederDevice(), {
-            'accessory': accessory,
-        });
-        this.accessories.set(accessory.UUID, petkitDevice);
-    };
-    
+  
     globalUrls(config, prop) {
         const host = config.get('host');
         const model = config.get('model').toLowerCase();
@@ -805,8 +798,9 @@ class petkit_feeder_plugin {
             };
         };
 
-        meal_amount_service.setCharacteristic(Characteristic.On, petkitDevice.savedData.mealAmount !== 0);
-        meal_amount_service.setCharacteristic(Characteristic.RotationSpeed, petkitDevice.savedData.mealAmount);
+        service_status = petkitDevice.config.get('meal_amount');
+        meal_amount_service.setCharacteristic(Characteristic.On, service_status !== 0);
+        meal_amount_service.setCharacteristic(Characteristic.RotationSpeed, service_status);
         meal_amount_service.getCharacteristic(Characteristic.RotationSpeed)
             .on('set', this.hb_mealAmount_set.bind(this, petkitDevice))
             .setProps({
@@ -814,6 +808,7 @@ class petkit_feeder_plugin {
                 maxValue: defaults.config.max_amount,
                 minStep: 1
             });
+        petkitDevice.savedData.mealAmount = service_status;
 
         petkitDevice.services.meal_amount_service = meal_amount_service;
 
@@ -1013,6 +1008,50 @@ class petkit_feeder_plugin {
         };
     };
     
+    removeAccessories() {
+        this.api.unregisterPlatformAccessories(pluginName, platformName, this.accessories);
+        this.accessories.splice(0, this.accessories.length);
+    };
+    
+    configureAccessory(accessory) {
+        this.accessories.push(accessory);
+    };
+    
+    addAccessory(name, config) {
+        const uuid = UUIDGen.generate(name);
+        const accessory = new this.api.platformAccessory(name, uuid, name);
+        if (!accessory) {
+            this.log.error('initialize Petkit Feeder failed: could not create accessory');
+            return;
+        };
+        let petkitDevice = new petkitFeederDevice();
+        petkitDevice.accessory = accessory;
+        petkitDevice.config = config;
+        this.log.debug('request initial device status from Petkit server.');
+        this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
+            if (deviceDetailInfo) {
+                petkitDevice.config.set('sn', deviceDetailInfo.sn);
+                petkitDevice.config.set('firmware', deviceDetailInfo.firmware);
+                petkitDevice.config.assign('headers', { 'X-TimezoneId': deviceDetailInfo.locale });
+                    
+                if (this.setupAccessory(petkitDevice)) {
+                    this.configureAccessory(petkitDevice.accessory);
+                    this.api.registerPlatformAccessories(pluginName, platformName, [petkitDevice.accessory]);
+                    
+                    this.log.info(format('initialize Petkit Feeder device({}) success.', config.get('name')));
+                    //feed DailyList
+                    this.hb_feedDailyList_set(petkitDevice, petkitDevice.config.get('enabled_daily_feeds'), () => {});
+                    //polling
+                    this.setupPolling(petkitDevice);
+                } else {
+                    this.log.error(format('initialize Petkit Feeder device({}) failed.', config.get('name')));
+                };           
+            } else {
+                this.log.warn(format('bypass initialize Petkit Feeder device({}).', config.get('name')));
+            };
+        });
+    };
+    
     initializeAccessory(config) {
         this.log.info('initializing Petkit Feeder device.');
 
@@ -1063,60 +1102,10 @@ class petkit_feeder_plugin {
                 };
                 config.set('deviceId', validDevice.id);
                 config.set('name', validDevice.name);
-                config.set('model', validDevice.type);     
-
-                const uuid = UUIDGen.generate(validDevice.name);
-                let petkitDevice = this.accessories.get(uuid);
-                if (!petkitDevice) {
-                    let accessory = new this.api.platformAccessory(validDevice.name, uuid, validDevice.name);
-                    if (!accessory) {
-                        this.log.error('initialize Petkit Feeder failed: could not create accessory');
-                        return;
-                    };
-
-                    petkitDevice = new petkitFeederDevice();
-                    petkitDevice.accessory = accessory;
-                    petkitDevice.config = config;
-                } else if (!petkitDevice.accessory) {
-                    let accessory = new this.api.platformAccessory(validDevice.name, uuid, validDevice.name);
-                    if (!accessory) {
-                        this.log.error('initialize Petkit Feeder failed: could not create accessory');
-                        return;
-                    };
-                    
-                    petkitDevice.accessory = accessory;
-                    petkitDevice.config = config;
-                } else {
-                    petkitDevice.config = config;
-                };
-
-                this.log.debug('request initial device status from Petkit server.');
-                this.http_getDeviceDetailStatus(petkitDevice, deviceDetailInfo => {
-                    if (deviceDetailInfo) {
-                        petkitDevice.config.set('sn', deviceDetailInfo.sn);
-                        petkitDevice.config.set('firmware', deviceDetailInfo.firmware);
-                        petkitDevice.config.assign('headers', { 'X-TimezoneId': deviceDetailInfo.locale });
-                        
-                        if (this.setupAccessory(petkitDevice)) {
-                            // all service setup success, now update accessory
-                            if (!this.accessories.get(uuid)) {
-                                this.api.registerPlatformAccessories(pluginName, platformName, [petkitDevice.accessory]);
-                            };
-                            this.accessories.set(uuid, petkitDevice.accessory);
-    
-                            this.log.info(format('initialize Petkit Feeder device({}) success.', config.get('name')));
-    
-                            //feed DailyList
-                            this.hb_feedDailyList_set(petkitDevice, petkitDevice.config.get('enabled_daily_feeds'), () => {});
-                            //polling
-                            this.setupPolling(petkitDevice);
-                        } else {
-                            this.log.error(format('initialize Petkit Feeder device({}) failed.', config.get('name')));
-                        };           
-                    } else {
-                        this.log.warn(format('bypass initialize Petkit Feeder device({}).', config.get('name')));
-                    };
-                });
+                config.set('model', validDevice.type);
+            
+                this.removeAccessories();
+                this.addAccessory(validDevice.id.toString(), config);       
             });
     };
 };

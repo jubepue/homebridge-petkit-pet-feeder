@@ -257,6 +257,14 @@
             "default": false,
             "placeholder": "false"
           },
+          "meal_amount": {
+            "title": "Meal amount set default.",
+            "required": true,
+            "type": "integer",
+            "default": 8,
+            "minimum": 0,
+            "maximum": 10
+          },
           "enabled_daily_feeds": {
             "title": "Enable feed daily scheduled.",
             "required": false,
@@ -443,7 +451,8 @@
                 "devices[].enable_lightMode",
                 "devices[].reverse_foodStorage_indicator",
                 "devices[].ignore_battery_when_charging",
-                "devices[].fast_response"
+                "devices[].fast_response",
+                "devices[].meal_amount"
               ]
             }
           ]
