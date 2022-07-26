@@ -11,8 +11,8 @@ const logs = require('./lib/log');
 const configPetkitFeeder = require('./lib/configpetkitfeeder');
 const petkitFeederDevice = require('./lib/petkitfeeder');
 
-const pluginName = 'homebridge-feeder';
-const platformName = 'petkit_feeder';
+const pluginName = 'homebridge-petkit-pet-feeder';
+const platformName = 'petkit_pet_feeder';
 
 const defaults = Object.freeze({
     'models': [                
