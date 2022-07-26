@@ -19,7 +19,7 @@ const defaults = Object.freeze({
         'Feeder',                    
         'FeederMini',                   
         'D4',                             
-        'D3',                               
+        'D3'                              
     ],
     'settings': {
         'Feeder': {
