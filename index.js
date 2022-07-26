@@ -11,8 +11,8 @@ const logs = require('./lib/log');
 const configPetkitFeeder = require('./lib/configpetkitfeeder');
 const petkitFeederDevice = require('./lib/petkitfeeder');
 
-const pluginName = 'homebridge-petkit-pet-feeder';
-const platformName = 'petkit_pet_feeder';
+const pluginName = 'homebridge-feeder';
+const platformName = 'petkit_feeder';
 
 const defaults = Object.freeze({
     'models': [                
@@ -153,7 +153,7 @@ module.exports = function (homebridge) {
     Characteristic = homebridge.hap.Characteristic;
     UUIDGen = homebridge.hap.uuid;
 
-    homebridge.registerPlatform(pluginName, platformName, petkit_feeder_plugin, true);
+    homebridge.registerPlatform(pluginName, platformName, petkit_pet_feeder_plugin, true);
 };
 
 function getTimestamp() {
@@ -164,7 +164,7 @@ function getDataString() {
     return dayjs(new Date()).format('YYYYMMDD');
 };
 
-class petkit_feeder_plugin {
+class petkit_pet_feeder_plugin {
     constructor(log, config, api) {
         this.log = new logs(log, config.log_level || logs.LOGLV_INFO);
         this.log.info('Begin to initialize Petkit feeder platform.');
@@ -345,6 +345,37 @@ class petkit_feeder_plugin {
         });
         return await this.http_request(options);
     };
+   
+    getParent(obj, key) {
+        let parent =[];
+        for (let i in obj) {
+            if (i == key) {
+                parent.push(i)
+                break;
+            } else {
+                if (typeof obj[i] == 'object') {
+                    const promise = this.getParent(obj[i], key);   
+                    if (promise.length != 0) {
+                        if (!Array.isArray(obj)) parent.push(i);
+                        parent.push(...promise);
+                        break;
+                    };
+                };
+            };
+        };
+        return parent;
+    };
+    
+    getFeedDailyList(obj, key) {
+        let parent = this.getParent(obj, key);
+        const length = parent.length;
+        parent.length = length - 1;
+        let meals = obj;
+        for (let i in parent) {
+            meals = meals[parent[i]];
+        };
+        return meals;
+    };
     
     praseGetDeviceDetailInfo(jsonObj) {
         if (!jsonObj) {
@@ -403,8 +434,7 @@ class petkit_feeder_plugin {
         // this.log.debug('device light status is: ' + (deviceDetailInfo.status.lightMode ? 'on' : 'off'));
            
         deviceDetailInfo.feedDailyList ={}
-
-        if (deviceInfo.multiFeedItem.feedDailyList !== undefined) deviceDetailInfo.feedDailyList.meals = deviceInfo.multiFeedItem.feedDailyList;
+        deviceDetailInfo.feedDailyList.meals = this.getFeedDailyList(deviceInfo, 'items');
         
         return deviceDetailInfo;
     };
@@ -422,7 +452,7 @@ class petkit_feeder_plugin {
             if (deviceDetailInfo) {
                 petkitDevice.status = Object.assign({}, deviceDetailInfo.status);
                 petkitDevice.status.lastUpdate = getTimestamp();
-                petkitDevice.feedDailyList.meals = Object.assign({}, deviceDetailInfo.feedDailyList.meals);
+                petkitDevice.feedDailyList.meals = deviceDetailInfo.feedDailyList.meals;
             };
             if (callback) callback(deviceDetailInfo);
         });
@@ -431,13 +461,38 @@ class petkit_feeder_plugin {
     async http_saveFeedDailyList(petkitDevice, feedDailyList) {
         const deviceId = petkitDevice.config.get('deviceId');
         const url_template = this.globalUrls(petkitDevice.config, 'saveFeed');
-        const url = format(url_template, deviceId, feedDailyList);
+        const url = format(url_template, deviceId, JSON.stringify(feedDailyList));
         const options = Object.assign(petkitDevice.config.get('http_options'), {
             'url': url,
             'headers': petkitDevice.config.get('headers')
         });     
         return await this.http_request(options);
-    };   
+    };
+    
+    fulfillItemFeedList(obj) {
+        let item = [];
+        for (let i in obj) {
+            const meal = {
+                "amount": obj[i].amount,
+                "id": obj[i].id,
+                "name": obj[i].name,
+                "time": obj[i].time
+            };
+            item.push(meal);
+        };
+        
+        return item;
+    };
+    
+    getItemFeedList(petkitDevice, day) {
+        let item = undefined;
+        if (!Array.isArray(petkitDevice.feedDailyList.meals)) {
+            item = this.fulfillItemFeedList(petkitDevice.feedDailyList.meals.items);
+        } else {
+            item = this.fulfillItemFeedList(petkitDevice.feedDailyList.meals[day - 1].items);          
+        };
+        return item;
+    };
     
     hb_feedDailyList_set(petkitDevice, value, callback) {
         const fast_response = petkitDevice.config.get('fast_response');
@@ -455,13 +510,12 @@ class petkit_feeder_plugin {
         } else {
             for (let day = 1; day <= 7; day++) {
                 feedDailyList.push({
-                    'items': petkitDevice.feedDailyList.meals[day - 1].items,
+                    'items': this.getItemFeedList(petkitDevice, day),
                     'repeats': day,
                     'suspended': (value ? 0 : 1)
                 });
             };
         };
-        feedDailyList = JSON.stringify(feedDailyList);
         this.http_saveFeedDailyList(petkitDevice, feedDailyList)
             .then(feedDailyList_raw => {
                 if (feedDailyList_raw && feedDailyList_raw.result) {   
