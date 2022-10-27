@@ -125,7 +125,7 @@ const defaults = Object.freeze({
             'deviceDetailInfo': '/device_detail?id={}',
             'saveDailyFeed': '/save_dailyfeed?deviceId={}&day={}&time={}&amount={}',
             'removeDailyFeed': '/remove_dailyfeed?deviceId={}&day={}&id=d{}',
-            'saveFeed': '/save_feed?deviceId={}?items={}?repeats=1,2,3,4,5,6,7?suspended={}',
+            'saveFeed': '/save_feed?deviceId={}&items={}&repeats=1,2,3,4,5,6,7&suspended={}',
             'dailyFeeds': '/dailyfeeds?deviceId={}&days={}',
             'restoreDailyFeeds': '/restore_dailyfeed?deviceId={}&day={}&id=s{}',
             'disableDailyFeeds': '/remove_dailyfeed?deviceId={}&day={}&id=s{}',
@@ -282,7 +282,7 @@ class petkit_pet_feeder_plugin {
         if (result.data.error) {
             this.log.error('http request failed: ' + JSON.stringify(result.data.error));
         };
-        //this.log.error(JSON.stringify(result.data));
+        
         return result.data;
     };
     
@@ -544,7 +544,7 @@ class petkit_pet_feeder_plugin {
                 if (petkitDevice.config.get('overwrite_daily_feeds')) {
                     feedDailyList = petkitDevice.config.get('feed_daily_list')
                 } else {
-                    feedDailyList = this.getItemFeedList(petkitDevice, day)
+                    feedDailyList = this.getItemFeedList(petkitDevice, 1)
                 };
                 break;
             default:     
@@ -1207,7 +1207,8 @@ class petkit_pet_feeder_plugin {
                 };
                 config.set('deviceId', validDevice.id);
                 config.set('name', validDevice.name);
-                config.set('model', validDevice.type);
+                //config.set('model', validDevice.type);
+                config.set('model', config.model);
             
                 this.removeAccessories();
                 this.addAccessory(validDevice.id.toString(), config);       
