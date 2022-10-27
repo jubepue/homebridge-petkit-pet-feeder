@@ -496,7 +496,7 @@ class petkit_pet_feeder_plugin {
         const url_template = this.globalUrls(petkitDevice.config, 'saveFeed');
         let url = undefined;
         switch (petkitDevice.config.get('model')) {
-            case 'D4':
+            case 'FeederMiniPro':
                 url = format(url_template, deviceId, JSON.stringify(feedDailyList), (suspended ? 0 : 1));
                 break;
             default:
@@ -540,7 +540,7 @@ class petkit_pet_feeder_plugin {
         let feedDailyList = [];
         
         switch (petkitDevice.config.get('model')) {
-            case 'D4':
+            case 'FeederMiniPro':
                 if (petkitDevice.config.get('overwrite_daily_feeds')) {
                     feedDailyList = petkitDevice.config.get('feed_daily_list')
                 } else {
