@@ -45,11 +45,11 @@ const defaults = Object.freeze({
             'foodWarnRange': 'settings.foodWarnRange'
         },
         'FeederMiniPro': {
-            'manualLock' : 'manualLock',
-            'lightMode' : 'lightMode',
-            'lightRange' : 'lightRange',
-            'foodWarn': 'foodWarn',
-            'foodWarnRange': 'foodWarnRange'
+            'manualLock' : 'settings.manualLock',
+            'lightMode' : 'settings.lightMode',
+            'lightRange' : 'settings.lightRange',
+            'foodWarn': 'settings.foodWarn',
+            'foodWarnRange': 'settings.foodWarnRange'
         },
         'D4': {
             'manualLock' : 'manualLock',
