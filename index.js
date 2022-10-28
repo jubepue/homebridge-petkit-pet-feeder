@@ -475,10 +475,10 @@ class petkit_pet_feeder_plugin {
         const model = petkitDevice.config.get('model');
         switch (defaults.feed[model]) {
             case 'single':
-                url = format(url_template, deviceId, JSON.stringify(feedDailyList), (suspended ? 0 : 1));
+                url = encodeURI(format(url_template, deviceId, JSON.stringify(feedDailyList), (suspended ? 0 : 1)));
                 break;
             default:
-                url = format(url_template, deviceId, JSON.stringify(feedDailyList));
+                url = encodeURI(format(url_template, deviceId, JSON.stringify(feedDailyList)));
         };
         const options = Object.assign(petkitDevice.config.get('http_options'), {
             'url': url,
@@ -492,7 +492,7 @@ class petkit_pet_feeder_plugin {
         for (let i in obj) {
             const meal = {
                 "amount": obj[i].amount,
-                "id": obj[i].id,
+                "id": (obj[i].id).toString(),
                 "name": obj[i].name,
                 "time": obj[i].time
             };
@@ -1146,7 +1146,6 @@ class petkit_pet_feeder_plugin {
                 if (raw) {
                     const user_deviceId = config.get('deviceId');
                     const user_model = config.get('model');
-                    this.log.error(user_model);
                     const owned_devices = this.praseGetOwnedDevice(raw);
                     if (owned_devices.length === 0) {
                         this.log.error(format('sorry that this plugin only works with these device type:{}.', JSON.stringify(defaults.models)));
