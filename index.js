@@ -17,17 +17,15 @@ const platformName = 'petkit_pet_feeder';
 const defaults = Object.freeze({
     'models': [                
         'Feeder',                    
-        'FeederMini',
-        'FeederMiniPro',                
-        'D4',                             
+        'FeederMini',          
+        'D4',                            
         'D3'                              
     ],
-    'name': {                
-        'Feeder' : 'feeder',                    
-        'FeederMini' : 'feedermini',
-        'FeederMiniPro' : 'feedermini',        
-        'D4' : 'd4',                           
-        'D3' : 'd3'                             
+    'feed': {              
+        'Feeder' : 'multi',                    
+        'FeederMini' : 'single',         
+        'D4' : 'multi',                            
+        'D3' : 'multi'                       
     },
     'settings': {
         'Feeder': {
@@ -38,13 +36,6 @@ const defaults = Object.freeze({
             'foodWarnRange': 'settings.foodWarnRange'
         },
         'FeederMini': {
-            'manualLock' : 'settings.manualLock',
-            'lightMode' : 'settings.lightMode',
-            'lightRange' : 'settings.lightRange',
-            'foodWarn': 'settings.foodWarn',
-            'foodWarnRange': 'settings.foodWarnRange'
-        },
-        'FeederMiniPro': {
             'manualLock' : 'settings.manualLock',
             'lightMode' : 'settings.lightMode',
             'lightRange' : 'settings.lightRange',
@@ -107,19 +98,6 @@ const defaults = Object.freeze({
             'updateSettings': '/update?id={}&kv={}'
         },
         'FeederMini': {
-            'owndevices': '/discovery/device_roster',
-            'deviceState': '/devicestate?id={}',
-            'deviceDetailInfo': '/device_detail?id={}',
-            'saveDailyFeed': '/save_dailyfeed?deviceId={}&day={}&time={}&amount={}',
-            'removeDailyFeed': '/remove_dailyfeed?deviceId={}&day={}&id=d{}',
-            'saveFeed': '/save_feed?deviceId={}&feedDailyList={}',
-            'dailyFeeds': '/dailyfeeds?deviceId={}&days={}',
-            'restoreDailyFeeds': '/restore_dailyfeed?deviceId={}&day={}&id=s{}',
-            'disableDailyFeeds': '/remove_dailyfeed?deviceId={}&day={}&id=s{}',
-            'resetDesiccant': '/desiccant_reset?deviceId={}',
-            'updateSettings': '/update?id={}&kv={}'
-        },
-        'FeederMiniPro': {
             'owndevices': '/discovery/device_roster',
             'deviceState': '/devicestate?id={}',
             'deviceDetailInfo': '/device_detail?id={}',
@@ -225,8 +203,7 @@ class petkit_pet_feeder_plugin {
   
     globalUrls(config, prop) {
         const host = config.get('host');
-        //const model = config.get('model').toLowerCase();
-        const model = config.get('modelname');
+        const model = config.get('model').toLowerCase();
         let url = undefined;
         if (prop === 'owndevices') {
             url = host + config.get('urls')[prop];
@@ -495,8 +472,9 @@ class petkit_pet_feeder_plugin {
         const deviceId = petkitDevice.config.get('deviceId');
         const url_template = this.globalUrls(petkitDevice.config, 'saveFeed');
         let url = undefined;
-        switch (petkitDevice.config.get('model')) {
-            case 'FeederMiniPro':
+        const model = petkitDevice.config.get('model');
+        switch (defaults.feed[model]) {
+            case 'single':
                 url = format(url_template, deviceId, JSON.stringify(feedDailyList), (suspended ? 0 : 1));
                 break;
             default:
@@ -538,9 +516,10 @@ class petkit_pet_feeder_plugin {
         const fast_response = petkitDevice.config.get('fast_response');
         if (fast_response) callback(null);
         let feedDailyList = [];
+        const model = petkitDevice.config.get('model');
         
-        switch (petkitDevice.config.get('model')) {
-            case 'FeederMiniPro':
+        switch (defaults.feed[model]) {
+            case 'single':
                 if (petkitDevice.config.get('overwrite_daily_feeds')) {
                     feedDailyList = petkitDevice.config.get('feed_daily_list')
                 } else {
@@ -1167,6 +1146,7 @@ class petkit_pet_feeder_plugin {
                 if (raw) {
                     const user_deviceId = config.get('deviceId');
                     const user_model = config.get('model');
+                    this.log.error(user_model);
                     const owned_devices = this.praseGetOwnedDevice(raw);
                     if (owned_devices.length === 0) {
                         this.log.error(format('sorry that this plugin only works with these device type:{}.', JSON.stringify(defaults.models)));
@@ -1207,8 +1187,7 @@ class petkit_pet_feeder_plugin {
                 };
                 config.set('deviceId', validDevice.id);
                 config.set('name', validDevice.name);
-                //config.set('model', validDevice.type);
-                config.set('model', config.model);
+                config.set('model', validDevice.type);
             
                 this.removeAccessories();
                 this.addAccessory(validDevice.id.toString(), config);       
