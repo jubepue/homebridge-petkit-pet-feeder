@@ -16,9 +16,7 @@
   <strong><a href="#2-how-to-setup">Setup Guide</a> | <a href="#4-how-to-contribute">Contribute</a> </strong>
 </p>
 
-## DEPRECATED. You can find the new plugin that replaces it in:
-
-https://github.com/jubepue/homebridge-petkit-platform
+## DEPRECATED. You can find the new plugin that replaces it in: <a href="https://github.com/jubepue/homebridge-petkit-platform">homebridge-petkit-platform</a>
 
 ## 1) Description
 
